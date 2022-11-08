@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+
+
         textView = findViewById(R.id.textView);
 
 
@@ -71,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.button);
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(!sharedPreferences.getString("phoneKey","").isEmpty()){
+            startActivity(new Intent(this, Welcome.class));
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

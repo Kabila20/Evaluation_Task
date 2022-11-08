@@ -1,7 +1,11 @@
 package com.example.evaluation_task;
 
 
+import static com.example.evaluation_task.MainActivity.MyPREFERENCES;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,11 +22,13 @@ import java.util.Objects;
 public class LoginPage extends AppCompatActivity {
     TextInputEditText MobileNumber, passWord;
      Button button;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         MobileNumber = findViewById(R.id.mobile);
         passWord = findViewById(R.id.password);
@@ -32,9 +38,6 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkLoginDetails();
-
-              //  intent.putExtra("Values", MobileNumber.getText().toString());
-               // intent.putExtra("Values", Password.getText().toString());
 
 
             }
@@ -49,8 +52,14 @@ public class LoginPage extends AppCompatActivity {
 
 
     private void checkLoginDetails() {
-        String mobileNo = null;
-        String password = null;
+        String mobileNo = MobileNumber.getText().toString();
+        String password = passWord.getText().toString();
+
+
+        String sharedPhone = sharedPreferences.getString("phoneKey","");
+        String sharedPassword = sharedPreferences.getString("passWordKey","");
+
+
         if (isEmpty(MobileNumber))
         {
             MobileNumber.setError("Enter your Phone number to login!");
@@ -60,13 +69,14 @@ public class LoginPage extends AppCompatActivity {
             passWord.setError("This field required password");
         }
 
-        else if (MobileNumber.getText().toString().equals(mobileNo) && passWord.getText().toString().equals(password))
+        else if (mobileNo.equals(sharedPhone) && password.equals(sharedPassword))
             {
                 Toast.makeText(LoginPage.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginPage.this, Welcome.class);
                 startActivity(intent);
             }
-        else {
+        else
+        {
                 Toast.makeText(LoginPage.this, "MobileNumber and Password Does not match", Toast.LENGTH_SHORT ).show();
             }
     }
